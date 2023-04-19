@@ -1,0 +1,149 @@
+.App {
+  font-family: sans-serif;
+  border: 1px solid #d8d8d8;
+  border-radius: 4px;
+  max-width: 800px;
+  margin: 32px auto;
+  /* padding: px; */
+}
+.app-top-add-button {
+  background-color: white;
+  padding: 4px 8px;
+  outline: none;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  display: block;
+  margin: 8px 8px 8px auto;
+  box-shadow: 2px 2px 5px #c8c8c8;
+}
+.App > ol {
+  margin: 16px;
+  border-radius: 4px;
+  /* background-color:#f8f8f8; */
+}
+
+.fields {
+  padding-left: 1rem;
+  position: relative;
+}
+
+.fields:before {
+  position: absolute;
+  border-top: 1px solid lightgrey;
+  border-bottom: 1px solid lightgrey;
+  content: "";
+  left: 0;
+  top: 15px;
+  height: calc(100% - 30px);
+  width: 10px;
+}
+
+.fields:after {
+  position: absolute;
+  background: lightgrey;
+  content: "";
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: calc(100% - 30px);
+  width: 1px;
+}
+
+.no-bracket:after {
+  content: none;
+}
+
+.no-bracket:before {
+  content: none;
+}
+
+.field {
+  border-bottom: 1px solid lightgrey;
+  /* Fixed height is important for the bracket. 
+  Otherwise its position doesn't remain fixed. */
+  height: 18px;
+
+  padding: 4px 8px;
+  display: flex;
+  border-radius: 4px;
+  justify-content: space-between;
+}
+
+.field-custom-css {
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 4px;
+}
+.field-left {
+  display: flex;
+  align-items: center;
+}
+.field-right {
+  display: none;
+}
+.field:hover {
+  background-color: #d8d8d8;
+}
+.field:hover > .field-right {
+  display: flex;
+  align-items: center;
+}
+.field-left-name {
+  min-width: 0;
+  border: none;
+  padding: 4px;
+  min-width: 0;
+  max-width: 60px;
+  overflow-x: scroll;
+  background-color: transparent;
+}
+.field-left-name:focus {
+  min-width: 0;
+  border: none;
+  outline: none;
+  background-color: white;
+}
+.field-right-require {
+  display: flex;
+  align-items: center;
+  margin-right: 16px;
+}
+.field-right-require-title {
+  font-size: 12px;
+  margin-right: 4px;
+}
+.field-left > .mantine-InputWrapper-root {
+  width: 120px;
+  margin-left: 12px;
+
+  
+}
+.field-left > .mantine-1wqyxin  {
+  min-width: 0;
+  min-height: 0 !important;
+  height: 24px !important;
+  background-color: #ced4da !important;
+}
+
+.field-right-buttons {
+  display: flex;
+  column-gap: 8px;
+}
+.field-right-buttons > button {
+ outline: none;
+ border: none;
+ /* padding: 4px 8px; */
+ width: 24px;
+ height: 24px;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ border-radius: 4px;
+ background-color:white ;
+ cursor: pointer ;
+}
+.field-right-require-switch {
+  /* width: 20px; */
+}
