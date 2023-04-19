@@ -4,23 +4,26 @@
   border-radius: 4px;
   max-width: 800px;
   margin: 32px auto;
-  /* padding: px; */
+  overflow: auto;
+}
+.schema {
+  min-width: 300px;
 }
 .app-top-add-button {
-  background-color: white;
+  background-color: #efefef4d;
   padding: 4px 8px;
   outline: none;
-  border: none;
+  border: 1px solid lightgray;
   border-radius: 4px;
   cursor: pointer;
   display: block;
   margin: 8px 8px 8px auto;
-  box-shadow: 2px 2px 5px #c8c8c8;
+  /* box-shadow: 2px 2px 5px #c8c8c8; */
 }
 .App > ol {
   margin: 16px;
   border-radius: 4px;
-  /* background-color:#f8f8f8; */
+  padding-inline-start: 20px;
 }
 
 .fields {
@@ -86,21 +89,21 @@
 .field:hover {
   background-color: #d8d8d8;
 }
-.field:hover > .field-right {
+.field-right {
   display: flex;
   align-items: center;
+  column-gap: 4px;
 }
 .field-left-name {
-  min-width: 0;
+  /* min-width: 60px; */
   border: none;
   padding: 4px;
-  min-width: 0;
-  max-width: 60px;
+  /* max-width: 60px; */
   overflow-x: scroll;
   background-color: transparent;
 }
 .field-left-name:focus {
-  min-width: 0;
+  /* min-width: 0; */
   border: none;
   outline: none;
   background-color: white;
@@ -108,42 +111,66 @@
 .field-right-require {
   display: flex;
   align-items: center;
-  margin-right: 16px;
+  /* margin-right: 16px; */
 }
 .field-right-require-title {
   font-size: 12px;
   margin-right: 4px;
 }
-.field-left > .mantine-InputWrapper-root {
-  width: 120px;
-  margin-left: 12px;
 
-  
-}
-.field-left > .mantine-1wqyxin  {
+.field-left > .mantine-1wqyxin {
   min-width: 0;
   min-height: 0 !important;
   height: 24px !important;
   background-color: #ced4da !important;
 }
 
-.field-right-buttons {
+.field-right {
   display: flex;
-  column-gap: 8px;
+  /* column-gap: 8px; */
 }
-.field-right-buttons > button {
- outline: none;
- border: none;
- /* padding: 4px 8px; */
- width: 24px;
- height: 24px;
- display: flex;
- align-items: center;
- justify-content: center;
- border-radius: 4px;
- background-color:white ;
- cursor: pointer ;
+.field-right > button {
+  outline: none;
+  border: none;
+  /* padding: 4px 8px; */
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  background-color: transparent;
+  cursor: pointer;
 }
-.field-right-require-switch {
-  /* width: 20px; */
+
+.field-right-add {
+  font-size: 18px;
+}
+
+.mantine-Switch-trackLabel {
+  min-width: 10px;
+}
+
+.mantine-Switch-label {
+  padding-right: 5px;
+}
+
+.mantine-InputWrapper-root {
+  width: 120px;
+  margin-left: 12px;
+}
+
+.mantine-Select-input {
+  padding-right: 20px;
+}
+
+@media (max-width: 480px) {
+  .mantine-Switch-label {
+    display: none;
+  }
+
+  .mantine-InputWrapper-root {
+    width: 70px;
+  }
 }

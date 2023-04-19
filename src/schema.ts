@@ -1,49 +1,56 @@
 export type FieldTypes = "object" | "string" | "integer" | "boolean";
 
 export type IField = {
+  name: string;
   type: FieldTypes;
   required?: boolean;
   fields?: IFields;
+  id: string;
 };
 
-export type IFields = Record<string, IField>;
+export type IFields = Array<IField>;
 
 export type ISchema = {
   fields: IFields;
 };
 
 export const schema: ISchema = {
-  fields: {
-    Person: {
+  fields: [
+    {
+      name: "Person",
       type: "object",
       required: true,
-      fields: {
-        name: {
+      fields: [
+        {
+          name: "name",
           type: "object",
           required: false,
-          fields: {
-            firstName: {
+          id: "aksdkla",
+          fields: [
+            {
+              name: "firstName",
               type: "string",
-              required: true
+              required: true,
+              id: "ajsndas",
             },
-            lastName: {
+            {
+              name: "lastName",
               type: "string",
-              required: true
-            }
-          }
+              required: true,
+              id: "jani12nkn0",
+            },
+          ],
         },
-        age: {
-          type: "integer"
-        }
-      }
+        { name: "age", type: "integer", id: "jn12nk1np" },
+      ],
+      id: "x456b",
     },
-    order: {
+    {
+      name: "Person",
       type: "string",
-      required: false
+      required: false,
+      id: "zb329dj",
     },
-    class: {
-      type: "boolean",
-      required: false
-    }
-  }
+    { name: "class", type: "boolean", required: false, id: "asdn9j2m" },
+  ],
 };

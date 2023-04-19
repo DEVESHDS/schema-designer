@@ -1,7 +1,7 @@
 import { IFields } from "./schema";
 import { Field } from "./Field";
 
-export function Fields({ fields, onDelete, onAdd,onChangeRequired }: Props) {
+export function Fields({ fields, onDelete, onAdd, onChangeRequired }: Props) {
   return (
     <div
       className={
@@ -10,42 +10,44 @@ export function Fields({ fields, onDelete, onAdd,onChangeRequired }: Props) {
           : "fields no-bracket"
       }
     >
-      {Object.entries(fields).map(([name, field], i) => {
-        return (
-          <>
+      {fields &&
+        fields.map((field, i) => {
+          return (
             <Field
-              name={name}
-              type={field.type}
+              field={field}
               required={field.required}
               onDelete={onDelete}
-              key={name}
+              key={field.id}
               onAdd={onAdd}
               onChangeRequired={onChangeRequired}
-              enableTypeChange={field.fields && Object.keys(field.fields).length > 0 ?true:false}
-            ></Field>
-            {field.fields && Object.keys(field.fields).length > 0 ? (
+              enableTypeChange={
+                field.fields && Object.keys(field.fields).length > 0
+                  ? true
+                  : false
+              }
+            >
               <Fields
                 fields={field.fields}
-                onChangeRequired={(id,arg,req,type)=>{onChangeRequired(`${name}.${id}`,arg,req,type)}}
-                onDelete={(id) => onDelete(`${name}.${id}`)}
-                onAdd={(id) => onAdd(`${name}.${id}`)}
-               
+                onChangeRequired={onChangeRequired}
+                onDelete={onDelete}
+                onAdd={onAdd}
               />
-            ) : (
-              <></>
-            )}
-          </>
-        );
-      })}
+            </Field>
+          );
+        })}
     </div>
   );
 }
 
 type Props = {
   name?: string;
-  fields: IFields;
-  // enableTypeChange:boolean,
+  fields?: IFields;
   onDelete: (id: string) => void;
   onAdd: (id: string) => void;
-  onChangeRequired: (id: string,arg:number, req: boolean|undefined,type:string) => void;
+  onChangeRequired: (
+    id: string,
+    arg: number,
+    req: boolean | undefined,
+    type: string
+  ) => void;
 };

@@ -1,45 +1,58 @@
 import "./styles.css";
-import { schema as _schema, ISchema, IField, IFields, FieldTypes } from "./schema";
+import { schema as _schema, ISchema, IFields, FieldTypes } from "./schema";
 import { FunctionComponent, useState } from "react";
 import { Fields } from "./Fields";
 import { Field } from "./Field";
 
-
-
- const  App:FunctionComponent=()=> {
+const App: FunctionComponent = () => {
   const [schema, setSchema] = useState<ISchema>(_schema);
 
-
   //function for adding at top
+  const onAddTop = () => {
+    const schemaCopy = JSON.parse(JSON.stringify(schema)) as ISchema;
+    if (!schemaCopy.fields) schemaCopy.fields = [];
 
-  const onAddTop=()=>{
-    const schemaCopy = JSON.parse(JSON.stringify(schema));
-    schemaCopy.fields={...schemaCopy.fields,addName: { type: "string" }}
+    schemaCopy.fields.push({
+      id: guidGenerator(),
+      name: `addName`,
+      type: "string",
+    });
     setSchema(schemaCopy);
-  }
+  };
 
   // Example id: `Person.name.firstName`
   const onAdd = (id: string) => {
     const schemaCopy = JSON.parse(JSON.stringify(schema));
 
     const findAndAdd = (id: string, fields: IFields) => {
-      const [firstId, secondId, ...rest] = id.split(".");
+      const field = fields.find((f) => f.id === id);
 
-      if (secondId && secondId !== "") {
-        if (fields[firstId].fields === undefined)
-          throw new Error(`Cannot found ${id}`);
+      if (field) {
+        if (!field.fields) field.fields = [];
 
-        findAndAdd([secondId, ...rest].join("."), fields[firstId].fields ?? {});
+        field.fields.push({
+          id: guidGenerator(),
+          name: `addName`,
+          type: "string",
+        });
+
+        return true;
       } else {
-        fields[firstId].fields = {
-          ...{ addName: { type: "string" } },
-          ...fields[firstId].fields
-        };
+        for (const field of fields) {
+          if (field.fields) {
+            if (findAndAdd(id, field.fields)) return true;
+          }
+        }
       }
+
+      return false;
     };
 
-    findAndAdd(id, schemaCopy.fields);
-    setSchema(schemaCopy);
+    if (findAndAdd(id, schemaCopy.fields)) {
+      setSchema(schemaCopy);
+    } else {
+      throw new Error(`Could not find ${id}`);
+    }
   };
 
   // Example id: `Person.name.firstName`
@@ -47,148 +60,138 @@ import { Field } from "./Field";
     const schemaCopy = JSON.parse(JSON.stringify(schema));
 
     const findAndDelete = (id: string, fields: IFields) => {
-      const [firstId, secondId, ...rest] = id.split(".");
+      const field = fields.find((f) => f.id === id);
 
-      if (secondId && secondId !== "") {
-        if (fields[firstId].fields === undefined)
-          throw new Error(`Cannot found ${id}`);
-
-        findAndDelete(
-          [secondId, ...rest].join("."),
-          fields[firstId].fields ?? {}
-        );
+      if (field) {
+        const fieldIndex = fields.findIndex((f) => f.id == id);
+        fields.splice(fieldIndex, 1);
+        return true;
       } else {
-        delete fields[firstId];
+        for (const field of fields) {
+          if (field.fields) {
+            if (findAndDelete(id, field.fields)) return true;
+          }
+        }
       }
+
+      return false;
     };
 
-    findAndDelete(id, schemaCopy.fields);
-
-    setSchema(schemaCopy);
+    if (findAndDelete(id, schemaCopy.fields)) {
+      setSchema(schemaCopy);
+    } else {
+      throw new Error(`Could not find ${id}`);
+    }
   };
 
-  const onChangeRequired = (id: string,arg:number, req: boolean|undefined,name:string) => {
-    
+  const onChangeRequired = (
+    id: string,
+    arg: number,
+    req: boolean | undefined,
+    name: string
+  ) => {
     const schemaCopy = JSON.parse(JSON.stringify(schema));
 
     const findAndChangeRequired = (id: string, fields: IFields) => {
-      const [firstId, secondId, ...rest] = id.split(".");
+      const field = fields.find((f) => f.id === id);
 
-      if (secondId && secondId !== "") {
-        if (fields[firstId].fields === undefined)
-          throw new Error(`Cannot found ${id}`);
-
-        findAndChangeRequired(
-          [secondId, ...rest].join("."),
-          fields[firstId].fields ?? {}
-        );
-      } else {
-        if(arg===1){
+      if (field) {
+        if (arg === 1) {
           //for changing required field
-          fields[firstId].required=req
-        }else if(arg===2){
+          field.required = req;
+        } else if (arg === 2) {
           //for changing property type field
-          fields[firstId].type=name as FieldTypes;
-        }else if(arg===3){
-          fields[name]=fields[firstId];
-          delete fields[firstId];
-
+          field.type = name as FieldTypes;
+        } else if (arg === 3) {
+          // for changing name
+          field.name = name;
         }
-        
-        
+
+        return true;
+      } else {
+        for (const field of fields) {
+          if (field.fields) {
+            if (findAndChangeRequired(id, field.fields)) return true;
+          }
+        }
       }
+
+      return false;
     };
-    findAndChangeRequired(id, schemaCopy.fields);
-    setSchema(schemaCopy);
+
+    if (findAndChangeRequired(id, schemaCopy.fields)) {
+      setSchema(schemaCopy);
+    } else {
+      throw new Error(`Could not find ${id}`);
+    }
   };
-
-  const findFieldHelper=(id: string, fields: IFields)=>{
-    const [firstId, secondId, ...rest] = id.split(".");
-
-      if (secondId && secondId !== "") {
-        if (fields[firstId].fields === undefined){
-          return null;
-        }
-          
-
-        findFieldHelper(
-          [secondId, ...rest].join("."),
-          fields[firstId].fields ?? {}
-        );
-      } else {
-        return fields;
-        
-        
-      }
-  }
-
-  const onChangePropertyName=(id:string,oldProperty:string,newProperty:string)=>{
-    const schemaCopy = JSON.parse(JSON.stringify(schema));
-   
-
-    const findAndDelete = (id: string, fields: IFields) => {
-      const [firstId, secondId, ...rest] = id.split(".");
-
-      if (secondId && secondId !== "") {
-        if (fields[firstId].fields === undefined)
-          throw new Error(`Cannot found ${id}`);
-
-        findAndDelete(
-          [secondId, ...rest].join("."),
-          fields[firstId].fields ?? {}
-        );
-      } else {
-        delete fields[firstId];
-      }
-    };
-
-    findAndDelete(id, schemaCopy.fields);
-
-    setSchema(schemaCopy);
-  }
 
   return (
     <div className="App">
-      <button className="app-top-add-button" onClick={()=>{
-     
-        onAddTop()
-      }}>+</button>
-      <ol>
-        {Object.entries(schema.fields).map(([name, field], i) => {
-          return (
-            <li key={name}>
-              <Field
-                name={name}
-                type={field.type}
-                required={field.required}
-                onDelete={onDelete}
-                onAdd={onAdd}
-                onChangeRequired={onChangeRequired}
-               
-                enableTypeChange={field.fields && Object.keys(field.fields).length > 0 ?true:false}
-              >
-                {field.fields ? (
+      <div className="schema">
+        <button
+          className="app-top-add-button"
+          onClick={() => {
+            onAddTop();
+          }}
+        >
+          +
+        </button>
+        <ol>
+          {schema.fields.map((field, i) => {
+            return (
+              <li key={field.id}>
+                <Field
+                  field={field}
+                  required={field.required}
+                  onDelete={onDelete}
+                  onAdd={onAdd}
+                  onChangeRequired={onChangeRequired}
+                  enableTypeChange={
+                    field.fields && field.fields.length > 0 ? true : false
+                  }
+                >
                   <Fields
                     fields={field.fields}
-                    onDelete={(id) => onDelete(`${name}.${id}`)}
-                    onAdd={(id) => onAdd(`${name}.${id}`)}
-                    onChangeRequired={(id,arg, req,type) =>
-                      onChangeRequired(`${name}.${id}`,arg, req,type)
-                    }
-                    
+                    onDelete={onDelete}
+                    onAdd={onAdd}
+                    onChangeRequired={onChangeRequired}
                   />
-                ) : (
-                  <></>
-                )}
-              </Field>
-            </li>
-          );
-        })}
-      </ol>
-      <button className="app-top-add-button" onClick={()=>{
-        console.log("Schema is :",schema);
-      }}>Save</button>
+                </Field>
+              </li>
+            );
+          })}
+        </ol>
+        <button
+          className="app-top-add-button"
+          onClick={() => {
+            console.log("Schema is :", schema);
+          }}
+        >
+          Save
+        </button>
+      </div>
     </div>
+  );
+};
+
+function guidGenerator() {
+  var S4 = function () {
+    return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+  };
+  return (
+    S4() +
+    S4() +
+    "-" +
+    S4() +
+    "-" +
+    S4() +
+    "-" +
+    S4() +
+    "-" +
+    S4() +
+    S4() +
+    S4()
   );
 }
 
